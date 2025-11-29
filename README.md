@@ -203,45 +203,11 @@ Al iniciar FastAPI se levanta un scheduler en segundo plano que genera un
 evento automáticamente cada 5 minutos y lo envía a blockchain. Requiere Ganache activo.
 Puedes ajustar el intervalo editando `EVENT_INTERVAL_SECONDS` en `web/fastapi_app.py`.
 
-## Esquemas y Migraciones
-Si las columnas nuevas (`detalles`, `evento`) no existían en versiones anteriores, se añaden vía `ALTER TABLE` al iniciar. No se eliminan datos previos.
 
-## Errores Comunes
-| Situación | Causa | Solución |
-|-----------|-------|----------|
-| `Blockchain client no conectado` | Ganache apagado o puerto distinto | Arrancar Ganache y verificar `GANACHE_URL` |
-| `jinja2.exceptions.UndefinedError: 'max' is undefined` | Uso de `max()` en plantillas | Reemplazado por cálculo en Python (`prev_offset`, `next_offset`) |
-| Filtro sin resultados | Criterio demasiado restrictivo | Probar sin fecha o con parte del evento |
-| ImportError `web3` en editor | Intérprete incorrecto | Seleccionar venv en VS Code (`.venv`) |
 
-## Desarrollo y Extensión
-- Añadir export JSON/CSV desde UI.
-- Agregar rango de fechas (date-from/date-to) usando entre comparaciones.
-- Indexar columnas críticas para búsquedas (SQLite: crear índices en tablas si crecieran demasiado).
 
-## Limpieza / Reset
-Para reiniciar bases:
-```pwsh
-Remove-Item .\data\blockaudit_admin.db, .\data\blockaudit_operational.db
-python .\main.py   # Se recrean
-```
 
-## Parar Ganache Job
-```pwsh
-Stop-Job -Name Ganache; Remove-Job -Name Ganache
-```
 
-## Seguridad
-La transacción escribe el log completo en campo `data`. No colocar secretos en `detalles`. Para producción: cifrar antes de enviar o almacenar referenciado.
 
-## Licencia
-(Sin encabezado de licencia; añadir si es necesario.)
 
-## Troubleshooting Rápido
-1. Verifica Ganache: `curl http://127.0.0.1:8545` debe responder JSON RPC.
-2. Comprueba versión web3: `python -c "import web3; print(web3.__version__)"`.
-3. Revisa que `data/` tenga ambas bases tras ejecutar `main.py`.
-4. Si filtros no funcionan, imprime manualmente: `python -c "from database.db_operational import listar_logs_operativos; from utils.config import OPERATIVE_DB_PATH; print(listar_logs_operativos(OPERATIVE_DB_PATH, limit=5))"`.
 
----
-Cualquier mejora adicional (rango de fechas, autenticación, exportaciones) se puede incorporar de forma modular.
