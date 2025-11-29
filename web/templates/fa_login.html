@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>Login</title></head>
+<body>
+<h2>Iniciar sesión</h2>
+<form method="post" action="/ui/login">
+  <label>Usuario: <input type="text" name="username" required></label><br>
+  <label>Contraseña: <input type="password" name="password" required></label><br>
+  <button type="submit">Entrar</button>
+</form>
+{% if error %}<p style="color:red;">{{ error }}</p>{% endif %}
+<p>¿No tienes cuenta? <a href="/ui/register">Regístrate</a></p>
+</body>
+</html>

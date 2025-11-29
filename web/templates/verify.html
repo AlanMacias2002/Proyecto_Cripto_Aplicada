@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h2>Verificación de Integridad</h2>
+  {% if ok %}
+    <div style="padding:8px; background:#e6ffed; border:1px solid #34c759;">{{ message }}</div>
+  {% else %}
+    <div style="padding:8px; background:#ffecec; border:1px solid #ff3b30;">{{ message or reason }}</div>
+  {% endif %}
+  {% if tx_hash %}
+  <p><b>Tx Hash:</b> <code>{{ tx_hash }}</code></p>
+  {% endif %}
+  {% if expected_digest and onchain_digest %}
+  <h3>Pruebas (SHA-256 de JSON canónico)</h3>
+  <ul>
+    <li>sha256(expected_json): <code>{{ expected_digest }}</code></li>
+    <li>sha256(onchain_json): <code>{{ onchain_digest }}</code></li>
+    <li>Igualdad de hashes: <b>{{ 'Sí' if expected_digest == onchain_digest else 'No' }}</b></li>
+  </ul>
+  {% endif %}
+  {% if diffs %}
+  <h3>Diferencias</h3>
+  <pre>{{ diffs | tojson(indent=2) }}</pre>
+  {% endif %}
+  {% if expected_json %}
+  <h3>JSON Esperado</h3>
+  <pre>{{ expected_json | tojson(indent=2) }}</pre>
+  {% endif %}
+  {% if onchain_json %}
+  <h3>JSON On-Chain</h3>
+  <pre>{{ onchain_json | tojson(indent=2) }}</pre>
+  {% endif %}
+{% endblock %}

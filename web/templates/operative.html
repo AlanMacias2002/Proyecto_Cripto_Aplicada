@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h2>Tabla Operativa</h2>
+  <form method="get">
+    <label>Evento: <input type="text" name="evento" value="{{ evento }}" /></label>
+    <label>Hash: <input type="text" name="hash" value="{{ hash_val }}" /></label>
+    <label>Fecha: <input type="text" name="fecha" value="{{ fecha }}" placeholder="YYYY-MM-DDTHH:MM:SSZ" /></label>
+    <label>Desde: <input type="text" name="fecha_desde" value="{{ fecha_desde }}" placeholder="YYYY-MM-DDTHH:MM:SSZ" /></label>
+    <label>Hasta: <input type="text" name="fecha_hasta" value="{{ fecha_hasta }}" placeholder="YYYY-MM-DDTHH:MM:SSZ" /></label>
+    <input type="hidden" name="limit" value="{{ limit }}" />
+    <button type="submit">Filtrar</button>
+  </form>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Hash Entidad</th>
+        <th>Evento</th>
+        <th>Fecha</th>
+        <th>Tx Hash</th>
+        <th>Detalles</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in rows %}
+      <tr>
+        <td>{{ r.id }}</td>
+        <td><code>{{ r.hash_entidad }}</code></td>
+        <td>{{ r.evento }}</td>
+        <td>{{ r.fecha }}</td>
+        <td><code>{{ r.tx_hash }}</code></td>
+        <td>
+          {{ r.detalles }}
+          <div><a href="/verify?tx={{ r.tx_hash }}" class="btn">Verificar</a></div>
+        </td>
+      </tr>
+      {% endfor %}
+      {% if rows|length == 0 %}
+      <tr><td colspan="6">Sin registros</td></tr>
+      {% endif %}
+    </tbody>
+  </table>
+  <div class="pager">
+    <a href="?limit={{ limit }}&offset={{ prev_offset }}&evento={{ evento }}&hash={{ hash_val }}&fecha={{ fecha }}&fecha_desde={{ fecha_desde }}&fecha_hasta={{ fecha_hasta }}">Anterior</a>
+    <a href="?limit={{ limit }}&offset={{ next_offset }}&evento={{ evento }}&hash={{ hash_val }}&fecha={{ fecha }}&fecha_desde={{ fecha_desde }}&fecha_hasta={{ fecha_hasta }}">Siguiente</a>
+  </div>
+{% endblock %}
