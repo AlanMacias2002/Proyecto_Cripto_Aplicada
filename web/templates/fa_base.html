@@ -21,6 +21,13 @@
     <a href="/ui/operative">Tabla Operativa</a>
     <a href="/ui/admin">Tabla Administrativa</a>
     <a href="/docs" target="_blank">Swagger</a>
+    {% if user %}
+      <span style="margin-left:1rem; color:#555;">Usuario: <strong>{{ user.username }}</strong> ({{ user.role }})</span>
+      <a href="/logout" style="margin-left:1rem; color:#c00;">Cerrar sesión</a>
+    {% else %}
+      <a href="/ui/login" style="margin-left:1rem;">Iniciar sesión</a>
+      <a href="/ui/register" style="margin-left:0.5rem;">Registrarse</a>
+    {% endif %}
   </nav>
   <main>
     {% block content %}{% endblock %}
